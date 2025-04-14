@@ -10,6 +10,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
         /// </summary>
         public Guid Id { get; set; }
 
+        public string SaleNumber { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the sale date.
         /// </summary>
@@ -26,6 +27,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
         public Guid BranchId { get; set; }
 
         public decimal TotalAmount { get; set; }
+
 
         /// <summary>
         /// Gets or sets the list of items in the sale.

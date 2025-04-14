@@ -28,11 +28,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
         public Guid BranchId { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of items in the sale.
-        /// </summary>
-
-        /// <summary>
-        /// Gets or sets the status of the item sale.
+        /// Gets or sets the role assigned to the sale.
         /// </summary>
         public SaleStatus Status { get; set; }
         public List<CreateSaleItemRequestDto> Items { get; set; } = new();

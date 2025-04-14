@@ -9,6 +9,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
         /// Gets or sets the unique identifier of the get sale.
         /// </summary>
         public Guid Id { get; set; }
+        public DateTime Date { get; set; }
+
 
         /// <summary>
         /// Gets or sets the number of the sale.
