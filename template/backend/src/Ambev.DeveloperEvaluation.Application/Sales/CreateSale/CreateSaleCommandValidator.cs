@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale.Dtos;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
@@ -22,6 +23,12 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 
             RuleFor(sale => sale.Items)
                 .NotEmpty().WithMessage("Sale must contain at least one item.");
+
+            RuleFor(sale => sale.Status).NotEqual(SaleStatus.None);
+
+            RuleFor(sale => sale.Status)
+           .Must(status => status == SaleStatus.Cancelled || status == SaleStatus.NotCancelled)
+           .WithMessage("Status must be either 'Cancelled' or 'NotCancelled'.");
 
             RuleForEach(sale => sale.Items)
                 .SetValidator(new SaleItemDtoValidator());

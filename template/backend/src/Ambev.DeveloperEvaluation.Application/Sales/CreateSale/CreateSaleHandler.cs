@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale.Dtos;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
 using Ambev.DeveloperEvaluation.Domain.Entities;

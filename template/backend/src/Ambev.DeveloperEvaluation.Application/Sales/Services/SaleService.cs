@@ -2,6 +2,7 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Sales.ListSale;
 using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
@@ -53,12 +54,12 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Services
 
             return sale;
         }
-        public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<ListSaleResult> GetAllAsync(ListSaleCommand request, CancellationToken cancellationToken)
         {
-            var sales = await _saleRepository.GetAllAsync(cancellationToken);
-            return sales;
+            var sales = await _saleRepository.GetAllPageAsync(request.Skip, request.Take, request.Order, cancellationToken);
+            var totalSize = await _saleRepository.CountAsync(cancellationToken);
+            return new ListSaleResult(totalSize, sales);
         }
-
         public async Task<Sale> DeleteAsync(DeleteSaleCommand command, CancellationToken cancellationToken)
         {
             var sale = await _saleRepository.GetByIdAsync(command.Id, cancellationToken)
@@ -96,7 +97,6 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Services
 
             return sale;
         }
-
         private void UpdateSaleItems(Sale sale, List<UpdateSaleItemCommandDto> updatedItems)
         {
             var updatedProductIds = updatedItems.Select(i => i.ProductId).ToHashSet();

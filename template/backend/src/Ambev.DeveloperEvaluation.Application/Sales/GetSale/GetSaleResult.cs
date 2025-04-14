@@ -10,7 +10,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
         /// Gets or sets the unique identifier of the created sale.
         /// </summary>
         public Guid Id { get; set; }
-
+        public DateTime Date { get; set; }
         /// <summary>
         /// Gets or sets the number of the sale.
         /// </summary>

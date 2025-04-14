@@ -1,6 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
@@ -48,6 +49,30 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return await _context.Sales
                 .Include(s => s.Items)
                 .ToListAsync(cancellationToken);
+        }
+        public async Task<int> CountAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Sales.CountAsync(cancellationToken);
+        }
+        /// <inheritdoc/>
+        public async Task<List<Sale>> GetAllPageAsync(int skip, int take, string? order, CancellationToken cancellationToken)
+        {
+            var query =  _context.Sales.Include(x => x.Items).AsQueryable();
+
+            switch (order?.ToLowerInvariant())
+            {
+                case "date asc":
+                    query = query.OrderBy(s => s.Date).Skip((skip -1)*take).Take(take);
+                    break;
+                case "date desc":
+                default:
+                    query = query.OrderByDescending(s => s.Date).Skip((skip - 1) * take).Take(take);
+                    break;
+            }
+           ;
+            var list = await query.ToListAsync(cancellationToken);
+
+            return list;
         }
         /// <inheritdoc/>
         public async Task UpdateAsync(Sale sale, CancellationToken cancellationToken)

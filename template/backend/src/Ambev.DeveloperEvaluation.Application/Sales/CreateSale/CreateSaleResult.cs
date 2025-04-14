@@ -17,6 +17,8 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         /// Gets or sets the number of the sale.
         /// </summary>
         public string SaleNumber { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+
         public string CustomerId { get; set; } = string.Empty;
         public string BranchId { get; set; } = string.Empty;
         /// <summary>

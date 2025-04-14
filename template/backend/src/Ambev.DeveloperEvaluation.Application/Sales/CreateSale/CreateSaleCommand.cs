@@ -27,9 +27,5 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         public List<CreateSaleItemCommandDto> Items { get; set; } = new();
         public SaleStatus Status { get; set; }
 
-
-
     }
-
-
 }

@@ -45,6 +45,9 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
 
         Task DeleteAsync(Sale sale, CancellationToken cancellationToken);
         Task UpdateAsync(Sale sale, CancellationToken cancellationToken);
+        Task<List<Sale>> GetAllPageAsync(int skip, int take, string? order, CancellationToken cancellationToken);
+        Task<int> CountAsync(CancellationToken cancellationToken);
+
 
     }
 }

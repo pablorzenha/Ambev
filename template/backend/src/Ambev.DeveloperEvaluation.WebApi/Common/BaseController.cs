@@ -16,8 +16,8 @@ public class BaseController : ControllerBase
     protected IActionResult Ok<T>(T data) =>
             base.Ok(new ApiResponseWithData<T> { Data = data, Success = true });
 
-    protected IActionResult Ok<T>(List<T> data, string message = "List retrieved successfully.") =>
-            base.Ok(new ApiResponseWithListData<T> { Data = data, Success = true, Message = message });
+    //protected IActionResult Ok<T>(List<T> data, string message = "List retrieved successfully.") =>
+    //        base.Ok(new ApiResponseWithListData<T> { Data = data, Success = true, Message = message });
 
     protected IActionResult Created<T>(string routeName, object routeValues, T data) =>
         base.CreatedAtRoute(routeName, routeValues, new ApiResponseWithData<T> { Data = data, Success = true });
@@ -28,13 +28,13 @@ public class BaseController : ControllerBase
     protected IActionResult NotFound(string message = "Resource not found") =>
         base.NotFound(new ApiResponse { Message = message, Success = false });
 
-    protected IActionResult OkPaginated<T>(PaginatedList<T> pagedList) =>
-            Ok(new PaginatedResponse<T>
+    protected IActionResult OkPaginated<T>(PaginatedList<T> data) =>
+            base.Ok(new PaginatedResponse<T>()
             {
-                Data = pagedList,
-                CurrentPage = pagedList.CurrentPage,
-                TotalPages = pagedList.TotalPages,
-                TotalCount = pagedList.TotalCount,
+                Data = data.Data,
+                CurrentPage = data.CurrentPage,
+                TotalPages = data.TotalPages,
+                TotalCount = data.TotalCount,
                 Success = true
             });
 }

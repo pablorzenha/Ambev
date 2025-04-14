@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.ListSale
 {
-    public class ListSaleHandler : IRequestHandler<ListSaleCommand, List<GetSaleResult>>
+    public class ListSaleHandler : IRequestHandler<ListSaleCommand, ListSaleResult>
     {
         private readonly ISaleService _saleService;
         private readonly IMapper _mapper;
@@ -30,10 +30,11 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.ListSale
         /// <param name="request">The ListSale command</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The sale details if found</returns>
-        public async Task<List<GetSaleResult>> Handle(ListSaleCommand request, CancellationToken cancellationToken)
+        public async Task<ListSaleResult> Handle(ListSaleCommand request, CancellationToken cancellationToken)
         {
-            var sales = await _saleService.GetAllAsync(cancellationToken);
-            return _mapper.Map<List<GetSaleResult>>(sales);
+            var sales = await _saleService.GetAllAsync(request, cancellationToken);
+
+            return _mapper.Map<ListSaleResult>(sales);
         }
     }
 }
