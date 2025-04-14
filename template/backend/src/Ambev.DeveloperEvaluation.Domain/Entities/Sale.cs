@@ -48,6 +48,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// </summary>
         public List<SaleItem> Items { get; set; } = new();
 
+
+        public Sale() { }
         public Sale( string saleNumber, Guid customerId, Guid branchId, DateTime date, SaleStatus status)
         {
             Id = Guid.NewGuid();

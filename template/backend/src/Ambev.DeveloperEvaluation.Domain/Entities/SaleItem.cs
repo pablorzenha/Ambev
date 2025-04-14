@@ -68,7 +68,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         {
             if (Quantity == quantity) return;
             Quantity = quantity;
-            CalculeTotalPrice();
+            SetDiscount(quantity);
         }
         public void SetDiscount(int quantity)
         {
@@ -79,6 +79,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
                 discount = 0.20m;
             Discount = discount;
             TotalPrice = (Quantity * UnitPrice) * (1 - Discount);
+            UpdatedAt = DateTime.UtcNow;
             CalculeTotalPrice();
         }
         public void SetUnitPrice(decimal unitPrice)
@@ -86,6 +87,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             if(UnitPrice == unitPrice) return;
             UnitPrice = unitPrice;
             TotalPrice = (Quantity * UnitPrice) * (1 - Discount);
+            UpdatedAt = DateTime.UtcNow;
             CalculeTotalPrice();
 
         }
@@ -98,7 +100,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         {
             ValidationMoreThanTwelve(productId, quantity);
             SetQuantity(quantity); 
-            SetDiscount(quantity);
             SetUnitPrice(unitPrice);
         }
         public static void ValidationMoreThanTwelve(Guid productId, int quantity)
