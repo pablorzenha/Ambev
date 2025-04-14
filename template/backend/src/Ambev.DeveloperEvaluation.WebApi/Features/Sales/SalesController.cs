@@ -133,9 +133,14 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
                 return BadRequest(validationResult.Errors);
 
             var command = _mapper.Map<UpdateSaleCommand>(request);
-            await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
 
-            return NoContent();
+            return Ok(new ApiResponseWithData<UpdateSaleResult>
+            {
+                Success = true,
+                Message = "Sale retrieved successfully",
+                Data = _mapper.Map<UpdateSaleResult>(result)
+            });
         }
     }
 }

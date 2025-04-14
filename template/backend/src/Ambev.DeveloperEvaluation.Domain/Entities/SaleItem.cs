@@ -62,12 +62,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// <returns>The item sale's ID as a string.</returns>
         string ISaleItem.Id => Id.ToString();
 
-        /// <summary>
-        /// Gets the unique identifier of the customer.
-        /// </summary>
-        /// <returns>The customer's ID as a string.</returns>
-        string ISaleItem.ProductId => ProductId.ToString();
-
         Guid? ISaleItem.SaleId => SaleId;
 
         public void SetQuantity(int quantity)

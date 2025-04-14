@@ -38,7 +38,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <inheritdoc/>
         public async Task<Sale?> GetByIdAsync(Guid Id, CancellationToken cancellationToken)
         {
-            return await _context.Sales
+            return await _context.Sales.Include(x => x.Items)
                 .FirstOrDefaultAsync(s => s.Id.Equals(Id), cancellationToken);
         }
 

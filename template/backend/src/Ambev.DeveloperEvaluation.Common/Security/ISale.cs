@@ -68,7 +68,7 @@ namespace Ambev.DeveloperEvaluation.Common.Security
         /// </summary>
         void CalculateTotal();
 
-        void AddItem(Guid productId, int quantity, decimal unitPrice);
+        ISaleItem AddItem(Guid productId, int quantity, decimal unitPrice);
 
         /// <summary>
         /// Adds a new item to the sale.

@@ -12,7 +12,7 @@
         /// Gets or sets the product unique identifier for the sale item.
         /// </summary>
         /// <returns>The product ID as a string.</returns>
-        public string ProductId { get; }
+        public Guid ProductId { get; }
 
         /// <summary>
         /// Gets or sets the quantity of the product in the sale.
@@ -53,6 +53,7 @@
         void SetQuantity(int quantity);
         void SetDiscount(int quantity);
         void SetUnitPrice(decimal unitPrice);
+        void Update(Guid productId, int quantity, decimal unitPrice);
 
     }
 }

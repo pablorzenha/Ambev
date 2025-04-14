@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -7,7 +8,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {
     public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
     {
-        private readonly ISaleRepository _saleRepository;
+        private readonly ISaleService _saleService;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -16,11 +17,10 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
         /// <param name="saleRepository">The Saçe repository</param>
         /// <param name="mapper">The AutoMapper instance</param>
         public GetSaleHandler(
-            ISaleRepository saleRepository,
-            IMapper mapper)
+            IMapper mapper, ISaleService saleService)
         {
-            _saleRepository = saleRepository;
             _mapper = mapper;
+            _saleService = saleService;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
+            var sale = await _saleService.GetByIdAsync(request.Id, cancellationToken);
 
             return _mapper.Map<GetSaleResult>(sale);
         }

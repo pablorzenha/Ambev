@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -7,7 +8,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale
 {
     public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleResult>
     {
-        private readonly ISaleRepository _saleRepository;
+        private readonly ISaleService _saleService;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -16,11 +17,11 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale
         /// <param name="saleRepository">The Saçe repository</param>
         /// <param name="mapper">The AutoMapper instance</param>
         public DeleteSaleHandler(
-            ISaleRepository saleRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ISaleService saleService)
         {
-            _saleRepository = saleRepository;
             _mapper = mapper;
+            _saleService = saleService;
         }
 
         /// <summary>
@@ -37,10 +38,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken) 
-                ?? throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
-
-            await _saleRepository.DeleteAsync(sale, cancellationToken);
+            var sale = await _saleService.DeleteAsync(request, cancellationToken);
 
             return _mapper.Map<DeleteSaleResult>(sale);
         }

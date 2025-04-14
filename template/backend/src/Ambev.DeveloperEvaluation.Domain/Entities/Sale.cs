@@ -1,8 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Common.Security;
-using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.Domain.Validation;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
@@ -86,9 +84,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 
         List<ISaleItem> ISale.Items => Items.Cast<ISaleItem>().ToList();
 
-        public void AddItem(Guid productId, int quantity, decimal unitPrice)
+        public ISaleItem AddItem(Guid productId, int quantity, decimal unitPrice)
         {
-            this.Items.Add(new SaleItem(quantity, unitPrice, productId, Id));
+            var saleItem = new SaleItem(quantity, unitPrice, productId, Id);
+            this.Items.Add(saleItem);
+
+            return saleItem;
         }
 
         public void Update(string saleNumber, DateTime date, Guid customerId, Guid branchId)
@@ -173,6 +174,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             }
             return grouped.Values.ToList();
         }
+
     }
 }
 
