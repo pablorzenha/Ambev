@@ -7,11 +7,11 @@ using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
-using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.Services
 {
@@ -37,9 +37,13 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Services
             var sale = _mapper.Map<Sale>(command);
             sale.ReplaceItems();
             sale.CalculateTotal();
-            _logger.LogInformation("Event: SaleNumberValidation | SaleId: {SaleNumber} ", sale.SaleNumber);
+            
 
             var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
+
+            var @event = new SaleCreatedEvent(createdSale.Id, createdSale.SaleNumber);
+            _logger.LogInformation("Publishing event: {@Event}", @event);
+
             return createdSale;
         }
         public async Task<Sale> GetByIdAsync(Guid saleId, CancellationToken cancellationToken)
@@ -69,9 +73,24 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Services
             var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken)
                 ?? throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
 
-            sale.Update(request.SaleNumber, request.Date, request.CustomerId, request.BranchId);
+            var currentUpdatedAt = sale.UpdatedAt;
+            var currentStatus = sale.Status;
+
+            sale.Update(request.SaleNumber, request.Date, request.CustomerId, request.BranchId, request.Status);
 
             UpdateSaleItems(sale, request.Items);
+
+            if (currentUpdatedAt != sale.UpdatedAt)
+            {
+                var @event = new SaleModifiedEvent(sale.Id, sale.SaleNumber);
+                _logger.LogInformation("Publishing event: {@Event}", @event);
+            }
+
+            if (currentStatus != sale.Status && sale.Status == SaleStatus.Cancelled)
+            {
+                var cancelledEvent = new SaleCancelledEvent(sale.Id, sale.SaleNumber);
+                _logger.LogInformation("Publishing event: {@Event}", cancelledEvent);
+            }
 
             await _saleRepository.UpdateAsync(sale, cancellationToken);
 
@@ -86,6 +105,9 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Services
             foreach (var item in itemsToRemove)
             {
                 sale.RemoveItem(item.ProductId);
+
+                var cancelledItemEvent = new ItemCancelledEvent(sale.Id, item.ProductId, sale.SaleNumber);
+                _logger.LogInformation("Publishing event: {@Event}", cancelledItemEvent);
             }
 
             var grouped = new Dictionary<Guid, ISaleItem>();

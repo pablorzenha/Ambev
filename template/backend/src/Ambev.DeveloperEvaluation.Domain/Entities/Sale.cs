@@ -92,18 +92,25 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             return saleItem;
         }
 
-        public void Update(string saleNumber, DateTime date, Guid customerId, Guid branchId)
+        public void Update(string saleNumber, DateTime date, Guid customerId, Guid branchId, SaleStatus status)
         {
             SetSaleNumber(saleNumber);
             SetDate(date);
             SetCustomer(customerId);
             SetBranch(branchId);
+            SetStatus(status);
         }
 
         public void SetSaleNumber(string saleNumber)
         {
             if (SaleNumber == saleNumber) return;
             SaleNumber = saleNumber;
+            UpdatedAt = DateTime.UtcNow;
+        }
+        public void SetStatus(SaleStatus status)
+        {
+            if (Status == status) return;
+            Status = status;
             UpdatedAt = DateTime.UtcNow;
         }
 
