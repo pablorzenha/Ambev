@@ -1,5 +1,4 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale.Dtos;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
@@ -34,7 +33,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
                 .SetValidator(new UpdateSaleItemRequestValidator());
         }
     }
-    public class UpdateSaleItemRequestValidator : AbstractValidator<UpdateSaleItemRequestDto>
+    public class UpdateSaleItemRequestValidator : AbstractValidator<UpdateSaleItemRequest>
     {
         public UpdateSaleItemRequestValidator()
         {

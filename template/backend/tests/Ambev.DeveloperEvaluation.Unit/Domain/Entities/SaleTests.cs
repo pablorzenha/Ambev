@@ -33,17 +33,14 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Constructor_Should_Initialize_Properties_Correctly()
         {
-            // Arrange
             var saleNumber = _faker.Random.AlphaNumeric(10);
             var customerId = Guid.NewGuid();
             var branchId = Guid.NewGuid();
             var date = _faker.Date.Past();
             var status = SaleStatus.NotCancelled;
 
-            // Act
             var sale = new Sale(saleNumber, customerId, branchId, date, status);
 
-            // Assert
             Assert.NotEqual(Guid.Empty, sale.Id);
             Assert.Equal(saleNumber, sale.SaleNumber);
             Assert.Equal(customerId, sale.CustomerId);
@@ -57,18 +54,14 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Set_SaleNumber_Should_Update_When_Different()
         {
-            // Arrange
             var sale = CreateSale();
             var newSaleNumber = _faker.Random.AlphaNumeric(10);
 
             var initialTimestamp = sale.UpdatedAt;
-            // Act
             sale.SetSaleNumber(newSaleNumber);
 
-            // Assert
             Assert.Equal(newSaleNumber, sale.SaleNumber);
-            Assert.True(sale.UpdatedAt != initialTimestamp);
-
+            Assert.False(sale.UpdatedAt == initialTimestamp);
         }
 
         [Fact]
@@ -178,16 +171,13 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Add_Item_Should_Add_SaleItem_And_Return_It()
         {
-            // Arrange
             var sale = new Sale();
             var productId = Guid.NewGuid();
             int quantity = 5;
             decimal price = 100m;
 
-            // Act
             var item = sale.AddItem(productId, quantity, price);
 
-            // Assert
             Assert.Single(sale.Items);
             Assert.Equal(productId, item.ProductId);
         }
@@ -195,15 +185,12 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Calculate_Total_Should_Sum_All_Items()
         {
-            // Arrange
             var sale = new Sale();
             sale.AddItem(Guid.NewGuid(), 2, 100); 
             sale.AddItem(Guid.NewGuid(), 4, 50); 
 
-            // Act
             sale.CalculateTotal();
 
-            // Assert
             Assert.Equal(200 + 180, sale.TotalAmount);
         }
 
@@ -218,7 +205,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
 
             sale.ReplaceItems();
 
-            Assert.Single(sale.Items); // Consolidado
+            Assert.Single(sale.Items);
             Assert.Equal(10, sale.Items[0].Quantity);
         }
 
@@ -244,11 +231,6 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
 
 
             sale.SetStatus(SaleStatus.Cancelled);
-
-            Console.WriteLine(sale.Status);
-            Console.WriteLine(SaleStatus.Cancelled);
-            Console.WriteLine(initialTimestamp);
-            Console.WriteLine(sale.UpdatedAt);
 
             Assert.Equal(SaleStatus.Cancelled, sale.Status);
             Assert.True(sale.UpdatedAt != initialTimestamp);

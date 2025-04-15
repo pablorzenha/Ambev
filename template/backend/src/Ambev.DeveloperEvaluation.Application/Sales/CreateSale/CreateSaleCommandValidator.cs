@@ -6,6 +6,18 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 {
     public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
     {
+        /// <summary>
+        /// Initializes a new instance of the CreateSaleCommandValidator with defined validation rules.
+        /// </summary>
+        /// <remarks>
+        /// Validation rules include:
+        /// - Date: Date must not be in the future.
+        /// - SaleNumber: SaleNumber is required.
+        /// - CustomerId: CustomerId must not be empty GUIDs
+        /// - BranchId: BranchId must not be empty GUIDs
+        /// - Items: At least one item is required
+        /// - Status: Status must be Cancelled or NotCancelled
+        /// </remarks>
         public CreateSaleCommandValidator()
         {
             RuleFor(sale => sale.Date)
@@ -13,7 +25,8 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
                 .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("The sale date cannot be in the future.");
 
             RuleFor(sale => sale.SaleNumber)
-                .NotEmpty().WithMessage("Sale Number is required.");
+                .NotEmpty().WithMessage("Sale Number is required.")
+                .Length(10, 50).WithMessage("Sale Number is more than 10 digits.");
 
             RuleFor(sale => sale.CustomerId)
                 .NotEqual(Guid.Empty).WithMessage("CustomerId is required.");
@@ -22,19 +35,29 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
                 .NotEqual(Guid.Empty).WithMessage("BranchId is required.");
 
             RuleFor(sale => sale.Items)
-                .NotEmpty().WithMessage("Sale must contain at least one item.");
-
-            RuleFor(sale => sale.Status).NotEqual(SaleStatus.None);
+                .NotEmpty().WithMessage("Sale must contain at least one item.")
+                .Must(items => items.Count > 0).WithMessage("Sale must contain at least one item.");
 
             RuleFor(sale => sale.Status)
-           .Must(status => status == SaleStatus.Cancelled || status == SaleStatus.NotCancelled)
-           .WithMessage("Status must be either 'Cancelled' or 'NotCancelled'.");
+                .NotEqual(SaleStatus.None)
+                .Must(status => status == SaleStatus.Cancelled || status == SaleStatus.NotCancelled)
+                .WithMessage("Status must be either 'Cancelled' or 'NotCancelled'.");
 
             RuleForEach(sale => sale.Items)
                 .SetValidator(new SaleItemDtoValidator());
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the SaleItemDtoValidator with defined validation rules.
+    /// </summary>
+    /// <remarks>
+    /// Validation rules include:
+    /// - ProductId: ProductId must not be empty
+    /// - Quantity: Quantity must be between 1 and 20
+    /// - UnitPrice: UnitPrice must be greater than 0
+    /// - Discount: Discount must be non-negative and respect limits based on quantity
+    /// </remarks>
     public class SaleItemDtoValidator : AbstractValidator<CreateSaleItemCommandDto>
     {
         public SaleItemDtoValidator()

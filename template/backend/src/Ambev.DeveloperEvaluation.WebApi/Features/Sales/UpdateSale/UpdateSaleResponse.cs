@@ -1,35 +1,37 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
 {
-    public class GetSaleResponse
+    public class UpdateSaleResponse
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the get sale.
+        /// Gets or sets unique identifier of the sale.
         /// </summary>
         public Guid Id { get; set; }
-        /// <summary>
-        /// Gets or sets the unique sale date.
-        /// </summary>
-        public DateTime Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the sale number of the sale.
+        /// Gets or sets the Sale Number.
         /// </summary>
         public string SaleNumber { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the sale date.
+        /// </summary>
+        public DateTime Date { get; set; }
+
+        /// <summary>
         /// Gets or sets the external customer identifier.
         /// </summary>
-        public string CustomerId { get; set; } = string.Empty;
+        public Guid CustomerId { get; set; }
 
         /// <summary>
-        /// Gets or sets the external branch identifier.
+        /// Gets or sets the external branch identifier where the sale was made.
         /// </summary>
-        public string BranchId { get; set; } = string.Empty;
+        public Guid BranchId { get; set; }
 
         /// <summary>
-        /// Gets or sets the total amount of the sale.
+        /// Gets or sets the Total Amount.
         /// </summary>
         public decimal TotalAmount { get; set; }
 
@@ -41,9 +43,11 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
         /// <summary>
         /// Gets or sets the list of items in the sale.
         /// </summary>
-        public List<GetSaleItemResponse> Items { get; set; } = new();
+        public List<UpdateSaleItemsResponse> Items { get; set; } = new();
+
     }
-    public class GetSaleItemResponse
+
+    public class UpdateSaleItemsResponse
     {
         /// <summary>
         /// Gets or sets unique identifier of the item sale.
@@ -66,9 +70,9 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
         public decimal UnitPrice { get; set; }
 
         /// <summary>
-        /// Gets or sets the discount of the product.
+        /// Gets or sets the discount applied to this item.
         /// </summary>
-        public decimal Discount { get; set; }
+        public decimal Discount { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the total price of the product.

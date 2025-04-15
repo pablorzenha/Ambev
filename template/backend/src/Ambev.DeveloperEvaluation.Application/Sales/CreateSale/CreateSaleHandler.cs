@@ -1,12 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale.Dtos;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
-using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
-using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
-using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.Services.Interfaces;
+using Ambev.DeveloperEvaluation.Application.Validation;
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -46,10 +40,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
         {
             var validator = new CreateSaleCommandValidator();
-            var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
+            await CommandValidator.ValidateAsync(command, validator, cancellationToken);
             
             var createdSale = await _saleService.CreateAsync(command, cancellationToken);
 

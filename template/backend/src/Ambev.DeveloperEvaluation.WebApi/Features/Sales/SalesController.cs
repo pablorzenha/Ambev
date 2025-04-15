@@ -3,13 +3,13 @@ using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.ListSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
+using Ambev.DeveloperEvaluation.WebApi.Validation;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -45,20 +45,16 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateSale([FromBody] CreateSaleRequest request, CancellationToken cancellationToken)
         {
-            var validator = new CreateSaleRequestValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            await RequestValidator.ValidateAsync(request, new CreateSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<CreateSaleCommand>(request);
-            var response = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
 
             return Created(string.Empty, new ApiResponseWithData<CreateSaleResponse>
             {
                 Success = true,
                 Message = "Sale created successfully",
-                Data = _mapper.Map<CreateSaleResponse>(response)
+                Data = _mapper.Map<CreateSaleResponse>(result)
             });
         }
 
@@ -69,16 +65,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var request = new GetSaleRequest { Id = id };
-            var validator = new GetSaleRequestValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            await RequestValidator.ValidateAsync(request, new GetSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<GetSaleCommand>(request);
-            var response = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
 
-            return Ok( _mapper.Map<GetSaleResponse>(response) );
+            return Ok( _mapper.Map<GetSaleResponse>(result) );
         }
 
         [HttpGet]
@@ -98,17 +90,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
                 Take = take,
                 Order = order
             };
-            var validator = new ListSaleRequestValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            await RequestValidator.ValidateAsync(request, new ListSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<ListSaleCommand>(request);
-            var response = await _mediator.Send(command, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
 
-            var items = _mapper.Map<List<GetSaleResult>>(response.Items);
-            var pagineted = new PaginatedList<GetSaleResult>(items, response.TotalSize, command.Skip, command.Take);
+            var items = _mapper.Map<List<GetSaleResult>>(result.Items);
+            var pagineted = new PaginatedList<GetSaleResult>(items, result.TotalSize, command.Skip, command.Take);
             return OkPaginated(pagineted) ;
         }
 
@@ -116,11 +104,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         public async Task<IActionResult> DeleteSale([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var request = new DeleteSaleRequest { Id = id };
-            var validator = new DeleteSaleRequestValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            await RequestValidator.ValidateAsync(request, new DeleteSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<DeleteSaleCommand>(request);
             await _mediator.Send(command, cancellationToken);
@@ -137,16 +121,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             if(id != request.Id)
                 return BadRequest();
 
-            var validator = new UpdateSaleValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            await RequestValidator.ValidateAsync(request, new UpdateSaleValidator(), cancellationToken);
 
             var command = _mapper.Map<UpdateSaleCommand>(request);
             var result = await _mediator.Send(command, cancellationToken);
 
-            return Ok(_mapper.Map<UpdateSaleResult>(result));
+            return Ok(_mapper.Map<UpdateSaleResponse>(result));
         }
     }
 }

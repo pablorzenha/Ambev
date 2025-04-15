@@ -1,6 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale.Dtos;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
@@ -10,7 +9,11 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
         public UpdateSaleProfile()
         {
             CreateMap<UpdateSaleRequest, UpdateSaleCommand>();
-            CreateMap<UpdateSaleItemRequestDto, UpdateSaleItemCommandDto>();
+            CreateMap<UpdateSaleItemRequest, UpdateSaleItemCommandDto>();
+
+            CreateMap<UpdateSaleResult, UpdateSaleResponse>();
+            CreateMap<UpdateSaleItemResultDto, UpdateSaleItemsResponse>();
+
         }
     }
 }

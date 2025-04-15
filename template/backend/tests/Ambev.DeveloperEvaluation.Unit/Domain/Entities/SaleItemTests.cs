@@ -12,21 +12,18 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Constructor_Should_Set_Values_Correctly_When_Valid_Parameters_Are_Passed()
         {
-            // Arrange
             var quantity = 5;
             var unitPrice = 10.0m;
             var productId = Guid.NewGuid();
             var saleId = Guid.NewGuid();
 
-            // Act
             var item = new SaleItem(quantity, unitPrice, productId, saleId);
 
-            // Assert
             Assert.Equal(quantity, item.Quantity);
             Assert.Equal(unitPrice, item.UnitPrice);
             Assert.Equal(productId, item.ProductId);
             Assert.Equal(saleId, item.SaleId);
-            Assert.Equal(0.10m, item.Discount); // Faixa de 4 a 9 tem 10% desconto
+            Assert.Equal(0.10m, item.Discount);
             Assert.Equal((quantity * unitPrice) * 0.90m, item.TotalPrice);
         }
 

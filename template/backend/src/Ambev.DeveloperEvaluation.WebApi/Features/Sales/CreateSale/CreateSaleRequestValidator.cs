@@ -1,18 +1,31 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale.Dtos;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
 {
     public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
     {
+        /// <summary>
+        /// Initializes a new instance of the CreateSaleRequestValidator with defined validation rules.
+        /// </summary>
+        /// <remarks>
+        /// Validation rules include:
+        /// - Date: Date must not be in the future.
+        /// - SaleNumber: SaleNumber is required.
+        /// - CustomerId: CustomerId must not be empty GUIDs
+        /// - BranchId: BranchId must not be empty GUIDs
+        /// - Items: At least one item is required
+        /// - Status: Status must be Cancelled or NotCancelled
+        /// </remarks>
         public CreateSaleRequestValidator()
         {
             RuleFor(sale => sale.Date)
                 .NotEmpty().WithMessage("The sale date is required.")
                 .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("The sale date cannot be in the future.");
 
-            RuleFor(sale => sale.SaleNumber).NotEmpty().Length(10, 50);
+            RuleFor(sale => sale.SaleNumber)
+                .NotEmpty().WithMessage("Sale Number is required.")
+                .Length(10, 50).WithMessage("Sale Number is more than 10 digits.");
 
             RuleFor(sale => sale.CustomerId)
                 .NotEqual(Guid.Empty).WithMessage("CustomerId is required.");
@@ -24,38 +37,37 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
                 .NotNull().WithMessage("Sale must contain at least one item.")
                 .Must(items => items.Count > 0).WithMessage("Sale must contain at least one item.");
 
-            RuleFor(item => item.Status)
-                .NotEqual(SaleStatus.None);
+            RuleFor(sale => sale.Status)
+                .NotEqual(SaleStatus.None)
+                .Must(status => status == SaleStatus.Cancelled || status == SaleStatus.NotCancelled)
+                .WithMessage("Status must be either 'Cancelled' or 'NotCancelled'.");
 
             RuleForEach(sale => sale.Items)
                 .SetValidator(new SaleItemRequestValidator());
         }
-    }
-    public class SaleItemRequestValidator : AbstractValidator<CreateSaleItemRequestDto>
-    {
-        public SaleItemRequestValidator()
+
+        /// <summary>
+        /// Initializes a new instance of the SaleItemRequestValidator with defined validation rules.
+        /// </summary>
+        /// <remarks>
+        /// Validation rules include:
+        /// - ProductId: ProductId must not be empty
+        /// - Quantity: Quantity must be between 1 and 20
+        /// - UnitPrice: UnitPrice must be greater than 0
+        /// </remarks>
+        public class SaleItemRequestValidator : AbstractValidator<CreateSaleItemRequest>
         {
-            RuleFor(item => item.ProductId)
-                .NotEqual(Guid.Empty).WithMessage("ProductId is required.");
+            public SaleItemRequestValidator()
+            {
+                RuleFor(item => item.ProductId)
+                    .NotEqual(Guid.Empty).WithMessage("ProductId is required.");
 
-            RuleFor(item => item.Quantity)
-                .InclusiveBetween(1, 20).WithMessage("Quantity must be between 1 and 20.");
+                RuleFor(item => item.Quantity)
+                    .InclusiveBetween(1, 20).WithMessage("Quantity must be between 1 and 20.");
 
-            RuleFor(item => item.UnitPrice)
-                .GreaterThan(0).WithMessage("Unit price must be greater than 0.");
-
-
-            //RuleFor(item => item.Discount)
-            //    .GreaterThanOrEqualTo(0).WithMessage("Discount cannot be negative.")
-            //    .Must((item, discount) =>
-            //    {
-            //        if (item.Quantity < 4 && discount > 0) return false;
-            //        if (item.Quantity >= 4 && item.Quantity < 10) return discount <= 0.10m * item.UnitPrice * item.Quantity;
-            //        if (item.Quantity >= 10 && item.Quantity <= 20) return discount <= 0.20m * item.UnitPrice * item.Quantity;
-            //        return true;
-            //    }).WithMessage("Discount does not match the allowed discount rules based on quantity.");
-
-
+                RuleFor(item => item.UnitPrice)
+                    .GreaterThan(0).WithMessage("Unit price must be greater than 0.");
+            }
         }
     }
 }

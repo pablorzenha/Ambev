@@ -1,5 +1,4 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale.Dtos;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
 {
@@ -9,10 +8,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
         /// Gets or sets the sale ID.
         /// </summary>
         public Guid Id { get; set; } 
+
         /// <summary>
         /// Gets or sets the sale date.
         /// </summary>
         public string SaleNumber { get; set; } = string.Empty;
+
         /// <summary>
         /// Gets or sets the sale date.
         /// </summary>
@@ -29,11 +30,32 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
         public Guid BranchId { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of items in the sale.
+        /// Gets or sets the status sale.
         /// </summary>
-        public List<UpdateSaleItemRequestDto> Items { get; set; } = new();
-
+        /// 
         public SaleStatus Status { get; set; }
 
+        /// <summary>
+        /// Gets or sets the list of items in the sale.
+        /// </summary>
+        public List<UpdateSaleItemRequest> Items { get; set; } = new();
+
+    }
+    public class UpdateSaleItemRequest
+    {
+        /// <summary>
+        /// Gets or sets the external product identifier.
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quantity of the product sold.
+        /// </summary>
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unit price of the product.
+        /// </summary>
+        public decimal UnitPrice { get; set; }
     }
 }

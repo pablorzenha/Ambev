@@ -5,8 +5,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSale
     public class ListSaleRequestValidator : AbstractValidator<ListSaleRequest>
     {
         /// <summary>
-        /// Initializes validation rules for GetSaleRequest
+        /// Initializes a new instance of the ListSaleRequestValidator with defined validation rules.
         /// </summary>
+        /// <remarks>
+        /// Validation rules include:
+        /// - Skip: Must be greater than or equal to 0
+        /// - Take: Must be less than or equal to 25
+        /// </remarks>
         public ListSaleRequestValidator()
         {
             RuleFor(x => x.Skip).GreaterThanOrEqualTo(0)
