@@ -1,5 +1,7 @@
 # Developer Evaluation Project
 
+This application manages sales operations using a clean architecture. It  uses MediatR and AutoMapper for request handling and mapping.
+
 ## Instructions
 
 ### How to Run the Application
