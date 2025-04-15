@@ -1,5 +1,7 @@
 # Developer Evaluation Project
 
+This application manages sales operations using a clean architecture. It  uses MediatR and AutoMapper for request handling and mapping.
+
 ## Instructions
 
 ### How to Run the Application
@@ -48,7 +50,7 @@ cd src/Ambev.DeveloperEvaluation.WebApi/
 dotnet run
 ```
 
-### Documentation
+## Documentation
 This project provides full documentation to help you understand, configure, and test the API.
 
 The detailed description of the API endpoints is available in the following file:<br>
@@ -62,5 +64,15 @@ There you'll find the orientation to complete CRUD for sales
 The project uses Swagger to expose interactive API documentation.<br>
 ```
 http://localhost:{PORT}/swagger
+```
+
+## Test
+
+This project contains unit tests.
+
+- To run
+  
+```
+cd tests/Ambev.DeveloperEvaluation.Unit/
 ```
 
