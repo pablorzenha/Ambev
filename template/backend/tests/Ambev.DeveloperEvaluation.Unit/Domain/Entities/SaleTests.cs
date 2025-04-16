@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
 using Bogus;
 using System;
 using System.Collections.Generic;
@@ -12,31 +13,14 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
 {
     public class SaleTests
     {
-        private readonly Faker _faker;
-
-        public SaleTests()
-        {
-            _faker = new Faker();
-        }
-
-        private Sale CreateSale()
-        {
-            return new Sale(
-                saleNumber: _faker.Random.AlphaNumeric(8),
-                customerId: Guid.NewGuid(),
-                branchId: Guid.NewGuid(),
-                date: _faker.Date.Past(),
-                status: SaleStatus.NotCancelled
-            );
-        }
 
         [Fact]
         public void Constructor_Should_Initialize_Properties_Correctly()
         {
-            var saleNumber = _faker.Random.AlphaNumeric(10);
-            var customerId = Guid.NewGuid();
-            var branchId = Guid.NewGuid();
-            var date = _faker.Date.Past();
+            var saleNumber = SaleTestData.GenerateValidSaleNumber();
+            var customerId = SaleTestData.GenerateCustomerId();
+            var branchId = SaleTestData.GenerateBranchId();
+            var date = SaleTestData.GenerateValidPastDate();
             var status = SaleStatus.NotCancelled;
 
             var sale = new Sale(saleNumber, customerId, branchId, date, status);
@@ -51,23 +35,24 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
             Assert.NotNull(sale.Items);
             Assert.Empty(sale.Items);
         }
+
         [Fact]
         public void Set_SaleNumber_Should_Update_When_Different()
         {
-            var sale = CreateSale();
-            var newSaleNumber = _faker.Random.AlphaNumeric(10);
+            var sale = SaleTestData.GenerateValidSale();
+            var newSaleNumber = SaleTestData.GenerateValidSaleNumber();
 
             var initialTimestamp = sale.UpdatedAt;
             sale.SetSaleNumber(newSaleNumber);
 
             Assert.Equal(newSaleNumber, sale.SaleNumber);
-            Assert.False(sale.UpdatedAt == initialTimestamp);
+            Assert.NotEqual(sale.UpdatedAt,initialTimestamp);
         }
 
         [Fact]
         public void Set_SaleNumber_Should_Not_Update_When_Same()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var originalUpdatedAt = sale.UpdatedAt;
 
             sale.SetSaleNumber(sale.SaleNumber);
@@ -78,20 +63,20 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Set_Status_Should_Update_When_Different()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var initialTimestamp = sale.UpdatedAt;
 
             sale.SetStatus(SaleStatus.Cancelled);
 
 
             Assert.Equal(SaleStatus.Cancelled, sale.Status);
-            Assert.True(sale.UpdatedAt != initialTimestamp);
+            Assert.NotEqual(sale.UpdatedAt, initialTimestamp);
         }
 
         [Fact]
         public void Set_Status_Should_Not_Update_When_Same()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var originalUpdatedAt = sale.UpdatedAt;
 
             sale.SetStatus(sale.Status);
@@ -102,19 +87,19 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Set_Date_Should_Update_When_Different()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var newDate = DateTime.UtcNow;
             var initialTimestamp = sale.UpdatedAt;
             sale.SetDate(newDate);
 
             Assert.Equal(newDate, sale.Date);
-            Assert.True(sale.UpdatedAt != initialTimestamp);
+            Assert.NotEqual(sale.UpdatedAt, initialTimestamp);
         }
 
         [Fact]
         public void Set_Date_Should_Not_Update_When_Same()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var originalUpdatedAt = sale.UpdatedAt;
 
             sale.SetDate(sale.Date);
@@ -125,19 +110,19 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Set_Customer_Should_Update_When_Different()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var newCustomerId = Guid.NewGuid();
             var initialTimestamp = sale.UpdatedAt;
             sale.SetCustomer(newCustomerId);
 
             Assert.Equal(newCustomerId, sale.CustomerId);
-            Assert.True(sale.UpdatedAt != initialTimestamp);
+            Assert.NotEqual(sale.UpdatedAt, initialTimestamp);
         }
 
         [Fact]
         public void Set_Customer_Should_Not_Update_When_Same()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var originalUpdatedAt = sale.UpdatedAt;
 
             sale.SetCustomer(sale.CustomerId);
@@ -148,19 +133,19 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         [Fact]
         public void Set_Branch_Should_Update_When_Different()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var newBranchId = Guid.NewGuid();
             var initialTimestamp = sale.UpdatedAt;
             sale.SetBranch(newBranchId);
 
             Assert.Equal(newBranchId, sale.BranchId);
-            Assert.True(sale.UpdatedAt != initialTimestamp);
+            Assert.NotEqual(sale.UpdatedAt, initialTimestamp);
         }
 
         [Fact]
         public void Set_Branch_Should_Not_Update_When_Same()
         {
-            var sale = CreateSale();
+            var sale = SaleTestData.GenerateValidSale();
             var originalUpdatedAt = sale.UpdatedAt;
 
             sale.SetBranch(sale.BranchId);
@@ -169,17 +154,48 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
         }
 
         [Fact]
-        public void Add_Item_Should_Add_SaleItem_And_Return_It()
+        public void Add_Sale_Item_In_Sale()
         {
-            var sale = new Sale();
+            var sale = SaleTestData.GenerateValidSale();
+            var productId = Guid.NewGuid();
+            int quantity = 5;
+            decimal price = 100m;
+            var initialListCount = sale.Items.Count;
+
+            var item = sale.AddItem(productId, quantity, price);
+
+            Assert.Single(sale.Items);
+            Assert.NotEqual(initialListCount,sale.Items.Count);
+            Assert.Equal(productId, item.ProductId);
+        }
+
+        [Fact]
+        public void Update_Sale_Item_In_Sale()
+        {
+            var sale = SaleTestData.GenerateValidSale();
             var productId = Guid.NewGuid();
             int quantity = 5;
             decimal price = 100m;
 
             var item = sale.AddItem(productId, quantity, price);
+            sale.UpdateItem(productId, 1, 20);
 
             Assert.Single(sale.Items);
-            Assert.Equal(productId, item.ProductId);
+            Assert.NotEqual(quantity, item.Quantity);
+        }
+
+        [Fact]
+        public void Remove_Sale_Item_In_Sale()
+        {
+            var sale = SaleTestData.GenerateValidSale();
+            var productId = Guid.NewGuid();
+            int quantity = 5;
+            decimal price = 100m;
+
+            sale.AddItem(productId, quantity, price);
+            sale.RemoveItem(productId);
+
+            Assert.Empty(sale.Items);
         }
 
         [Fact]

@@ -7,7 +7,13 @@ namespace Ambev.DeveloperEvaluation.Application.UseCases.Sales.DeleteSale
         /// <summary>
         /// The unique identifier of the sale to retrieve
         /// </summary>
-        public Guid Id { get; }
+        public Guid Id { get; set; }
+
+
+        public DeleteSaleCommand()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of DeleteSaleCommand

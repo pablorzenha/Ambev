@@ -61,7 +61,7 @@ namespace Ambev.DeveloperEvaluation.Application.Services
 
             return new ListSaleResult(totalSize, sales);
         }
-        public async Task<Sale> DeleteAsync(DeleteSaleCommand command, CancellationToken cancellationToken)
+        public async Task<Sale?> DeleteAsync(DeleteSaleCommand command, CancellationToken cancellationToken)
         {
             var sale = await _saleValidation.ExistsSaleIdAsync(command.Id, cancellationToken);
             await _saleRepository.DeleteAsync(sale, cancellationToken);

@@ -130,6 +130,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             BranchId = branchId;
             UpdatedAt = DateTime.UtcNow;
         }
+
         public ISaleItem AddItem(Guid productId, int quantity, decimal unitPrice)
         {
             var saleItem = new SaleItem(quantity, unitPrice, productId, Id);
@@ -154,10 +155,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             CalculateTotal();
         }
 
-        public void CalculateTotal()
-        {
-            TotalAmount = Items.Sum(i => i.TotalPrice);
-        }
         public void ReplaceItems()
         {
             var consolidateItems = ConsolidateItems();
@@ -192,6 +189,10 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
                 entry.SetDiscount(entry.Quantity);
             }
             return grouped.Values.ToList();
+        }
+        public void CalculateTotal()
+        {
+            TotalAmount = Items.Sum(i => i.TotalPrice);
         }
 
     }

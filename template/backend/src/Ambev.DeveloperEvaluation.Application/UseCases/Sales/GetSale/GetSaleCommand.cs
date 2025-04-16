@@ -7,8 +7,10 @@ namespace Ambev.DeveloperEvaluation.Application.UseCases.Sales.GetSale
         /// <summary>
         /// The unique identifier of the sale to retrieve
         /// </summary>
-        public Guid Id { get; }
+        public Guid Id { get; set; }
 
+
+        public GetSaleCommand() { }
         /// <summary>
         /// Initializes a new instance of GetSaleCommand
         /// </summary>
