@@ -39,7 +39,6 @@ namespace Ambev.DeveloperEvaluation.Application.Services
             var verfiedList = new Dictionary<Guid, ISaleItem>();
             foreach (var updatedItem in updatedItems)
             {
-                var existingItem = sale.Items.FirstOrDefault(i => i.ProductId == updatedItem.ProductId);
                 if (verfiedList.TryGetValue(updatedItem.ProductId, out var groupedItem))
                 {
                     groupedItem.Quantity += updatedItem.Quantity;
@@ -48,12 +47,7 @@ namespace Ambev.DeveloperEvaluation.Application.Services
                         throw new InvalidOperationException("Multiple unit prices found for the same product.");
                 }
                 else
-                {
-                    if (existingItem != null)
-                        verfiedList[updatedItem.ProductId] = new SaleItem(existingItem.Quantity + updatedItem.Quantity, existingItem.UnitPrice, existingItem.ProductId, sale.Id);
-                    else
-                        verfiedList[updatedItem.ProductId] = new SaleItem(updatedItem.Quantity, updatedItem.UnitPrice, updatedItem.ProductId, sale.Id);
-                }
+                    verfiedList[updatedItem.ProductId] = new SaleItem(updatedItem.Quantity, updatedItem.UnitPrice, updatedItem.ProductId, sale.Id);
             }
 
             return verfiedList;
