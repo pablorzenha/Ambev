@@ -1,4 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Application.Features.Sales.UpdateSale;
+﻿using Ambev.DeveloperEvaluation.Application.UseCases.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Application.Interfaces

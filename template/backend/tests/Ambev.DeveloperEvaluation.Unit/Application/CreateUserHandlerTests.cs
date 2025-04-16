@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Application.Features.Users.CreateUser;
+using Ambev.DeveloperEvaluation.Application.UseCases.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;

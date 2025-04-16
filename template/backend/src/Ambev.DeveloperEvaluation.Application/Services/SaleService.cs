@@ -1,8 +1,8 @@
-﻿using Ambev.DeveloperEvaluation.Application.Features.Sales.CreateSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.DeleteSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.ListSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.UpdateSale;
-using Ambev.DeveloperEvaluation.Application.Interfaces;
+﻿using Ambev.DeveloperEvaluation.Application.Interfaces;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.ListSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Events;

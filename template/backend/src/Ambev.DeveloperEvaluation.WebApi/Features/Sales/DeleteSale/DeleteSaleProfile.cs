@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.DeleteSale;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale
 {

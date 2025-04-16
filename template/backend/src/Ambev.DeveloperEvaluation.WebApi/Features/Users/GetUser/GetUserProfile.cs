@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Application.Features.Users.GetUser;
+using Ambev.DeveloperEvaluation.Application.UseCases.Users.GetUser;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;

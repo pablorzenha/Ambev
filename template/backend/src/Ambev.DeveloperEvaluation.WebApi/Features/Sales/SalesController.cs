@@ -1,8 +1,8 @@
-﻿using Ambev.DeveloperEvaluation.Application.Features.Sales.CreateSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.DeleteSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.GetSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.ListSale;
-using Ambev.DeveloperEvaluation.Application.Features.Sales.UpdateSale;
+﻿using Ambev.DeveloperEvaluation.Application.UseCases.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.ListSale;
+using Ambev.DeveloperEvaluation.Application.UseCases.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;

@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Application.Features.Users.DeleteUser;
+using Ambev.DeveloperEvaluation.Application.UseCases.Users.DeleteUser;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser;
