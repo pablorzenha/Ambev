@@ -54,12 +54,11 @@ namespace Ambev.DeveloperEvaluation.Application.Services
             var sale = await _saleValidation.ExistsSaleIdAsync(saleId, cancellationToken);
             return sale;
         }
-        public async Task<ListSaleResult> GetAllAsync(ListSaleCommand request, CancellationToken cancellationToken)
+        public async Task<List<Sale>> GetAllAsync(ListSaleCommand request, CancellationToken cancellationToken)
         {
             var sales = await _saleRepository.GetAllPageAsync(request.Skip, request.Take, request.Order, cancellationToken);
-            var totalSize = await _saleRepository.CountAsync(cancellationToken);
 
-            return new ListSaleResult(totalSize, sales);
+            return sales;
         }
         public async Task<Sale?> DeleteAsync(DeleteSaleCommand command, CancellationToken cancellationToken)
         {
@@ -96,7 +95,11 @@ namespace Ambev.DeveloperEvaluation.Application.Services
             return sale;
         }
 
-
+        public async Task<int> CountAsync(CancellationToken cancellationToken)
+        {
+            var totalSize = await _saleRepository.CountAsync(cancellationToken);
+            return totalSize;
+        }
     }
 }
 

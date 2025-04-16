@@ -11,7 +11,8 @@ namespace Ambev.DeveloperEvaluation.Application.Interfaces
         Task<Sale> CreateAsync(CreateSaleCommand command, CancellationToken cancellationToken);
         Task<Sale?> DeleteAsync(DeleteSaleCommand command, CancellationToken cancellationToken);
         Task<Sale> GetByIdAsync(Guid saleId, CancellationToken cancellationToken);
-        Task<ListSaleResult> GetAllAsync(ListSaleCommand request, CancellationToken cancellationToken);
-        Task<Sale> UpdateAsync(UpdateSaleCommand request, CancellationToken cancellationToken);
+        Task<List<Sale>> GetAllAsync(ListSaleCommand command, CancellationToken cancellationToken);
+        Task<Sale> UpdateAsync(UpdateSaleCommand command, CancellationToken cancellationToken);
+        Task<int> CountAsync(CancellationToken cancellationToken);
     }
 }

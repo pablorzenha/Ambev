@@ -30,7 +30,10 @@ namespace Ambev.DeveloperEvaluation.Application.UseCases.Sales.ListSale
         /// <returns>The sale details if found</returns>
         public async Task<ListSaleResult> Handle(ListSaleCommand command, CancellationToken cancellationToken)
         {
-            return await _saleService.GetAllAsync(command, cancellationToken);
+            var list = await _saleService.GetAllAsync(command, cancellationToken);
+            var count = await _saleService.CountAsync(cancellationToken);
+
+            return new ListSaleResult(count, list);
         }
     }
 }
