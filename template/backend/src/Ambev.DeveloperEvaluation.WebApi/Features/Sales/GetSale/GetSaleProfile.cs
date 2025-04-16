@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale.Dtos;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.GetSale;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
 {
@@ -8,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
     {
         public GetSaleProfile()
         {
-            CreateMap<GetSaleItemResultDto, GetSaleItemResponse>();
+            CreateMap<GetSaleItemResult, GetSaleItemResponse>();
             CreateMap<GetSaleResult, GetSaleResponse>();
             CreateMap<GetSaleRequest, GetSaleCommand>();
         }

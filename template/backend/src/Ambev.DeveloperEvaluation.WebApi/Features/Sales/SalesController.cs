@@ -1,8 +1,8 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
-using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
-using Ambev.DeveloperEvaluation.Application.Sales.ListSale;
-using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
+﻿using Ambev.DeveloperEvaluation.Application.Features.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.ListSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
@@ -45,7 +45,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateSale([FromBody] CreateSaleRequest request, CancellationToken cancellationToken)
         {
-            await RequestValidator.ValidateAsync(request, new CreateSaleRequestValidator(), cancellationToken);
+            await RequestValidation.ValidateAsync(request, new CreateSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<CreateSaleCommand>(request);
             var result = await _mediator.Send(command, cancellationToken);
@@ -58,6 +58,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             });
         }
 
+        /// <summary>
+        /// Get a sale
+        /// </summary>
+        /// <param name="id">The sale unique identifier of the sale</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The sale details</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -65,14 +71,23 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var request = new GetSaleRequest { Id = id };
-            await RequestValidator.ValidateAsync(request, new GetSaleRequestValidator(), cancellationToken);
+            await RequestValidation.ValidateAsync(request, new GetSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<GetSaleCommand>(request);
             var result = await _mediator.Send(command, cancellationToken);
 
-            return Ok( _mapper.Map<GetSaleResponse>(result) );
+            return Ok(_mapper.Map<GetSaleResponse>(result));
         }
 
+
+        /// <summary>
+        /// Get all sale
+        /// </summary>
+        /// <param name="skip">The number page</param>
+        /// <param name="take">The number quantity in page</param>
+        /// <param name="order">The order in page</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The sales details</returns>
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedList<GetSaleResult>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -90,7 +105,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
                 Take = take,
                 Order = order
             };
-            await RequestValidator.ValidateAsync(request, new ListSaleRequestValidator(), cancellationToken);
+            await RequestValidation.ValidateAsync(request, new ListSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<ListSaleCommand>(request);
             var result = await _mediator.Send(command, cancellationToken);
@@ -100,11 +115,16 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             return OkPaginated(pagineted) ;
         }
 
+        /// <summary>
+        /// Get all sale
+        /// </summary>
+        /// <param name="id">The unique identifier of the sale</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSale([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var request = new DeleteSaleRequest { Id = id };
-            await RequestValidator.ValidateAsync(request, new DeleteSaleRequestValidator(), cancellationToken);
+            await RequestValidation.ValidateAsync(request, new DeleteSaleRequestValidator(), cancellationToken);
 
             var command = _mapper.Map<DeleteSaleCommand>(request);
             await _mediator.Send(command, cancellationToken);
@@ -112,6 +132,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             return NoContent();
         }
 
+        /// <summary>
+        /// Get all sale
+        /// </summary>
+        /// <param name="id">The unique identifier of the sale</param>
+        /// <param name="request">The sale update request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The sales details</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponseWithData<UpdateSaleResult>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -121,7 +148,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
             if(id != request.Id)
                 return BadRequest();
 
-            await RequestValidator.ValidateAsync(request, new UpdateSaleValidator(), cancellationToken);
+            await RequestValidation.ValidateAsync(request, new UpdateSale.UpdateSaleValidator(), cancellationToken);
 
             var command = _mapper.Map<UpdateSaleCommand>(request);
             var result = await _mediator.Send(command, cancellationToken);

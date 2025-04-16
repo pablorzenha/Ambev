@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Ambev.DeveloperEvaluation.Application.Sales.ListSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Features.Sales.ListSale;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSale
 {

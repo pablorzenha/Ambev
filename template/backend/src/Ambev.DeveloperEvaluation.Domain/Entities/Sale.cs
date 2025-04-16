@@ -86,13 +86,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 
         List<ISaleItem> ISale.Items => Items.Cast<ISaleItem>().ToList();
 
-        public ISaleItem AddItem(Guid productId, int quantity, decimal unitPrice)
-        {
-            var saleItem = new SaleItem(quantity, unitPrice, productId, Id);
-            this.Items.Add(saleItem);
 
-            return saleItem;
-        }
 
         public void Update(string saleNumber, DateTime date, Guid customerId, Guid branchId, SaleStatus status)
         {
@@ -136,12 +130,28 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             BranchId = branchId;
             UpdatedAt = DateTime.UtcNow;
         }
+        public ISaleItem AddItem(Guid productId, int quantity, decimal unitPrice)
+        {
+            var saleItem = new SaleItem(quantity, unitPrice, productId, Id);
+            this.Items.Add(saleItem);
+            CalculateTotal();
 
+            return saleItem;
+        }
+        public void UpdateItem(Guid productId, int quantity, decimal unitPrice)
+        {
+            var item = Items.FirstOrDefault(i => i.ProductId == productId) ?? throw new KeyNotFoundException("Sale Item is not found.");
+            item.SetQuantity(quantity);
+            item.SetUnitPrice(unitPrice);
+            CalculateTotal();
+        }
         public void RemoveItem(Guid productId)
         {
             var item = Items.FirstOrDefault(i => i.ProductId == productId);
             if (item != null)
                 Items.Remove(item);
+
+            CalculateTotal();
         }
 
         public void CalculateTotal()

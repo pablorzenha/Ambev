@@ -25,7 +25,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
                 .NotNull().WithMessage("Sale must contain at least one item.")
                 .Must(items => items.Count > 0).WithMessage("Sale must contain at least one item.");
 
-
             RuleFor(sale => sale.Status)
                     .NotEqual(SaleStatus.None);
 

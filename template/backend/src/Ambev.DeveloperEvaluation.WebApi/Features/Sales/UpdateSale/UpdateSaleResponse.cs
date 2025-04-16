@@ -1,5 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale.Dtos;
-using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale
 {
