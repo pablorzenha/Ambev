@@ -33,4 +33,8 @@
     <ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.WebApi\Ambev.DeveloperEvaluation.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\UseCases\" />
+  </ItemGroup>
+
 </Project>
